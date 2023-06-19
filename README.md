@@ -1,11 +1,11 @@
-# Flask_Log
+# PYTHON
 > 学习flask后简单利用python进行数据库交互并结合前端写出一个登录框
 
 flask的主函数在main.py中，该项目以学习为主，并没有做出一个完整的CMS效果
 
 其他的HTML和CSS、js文件分别保存在templates和static中
 
-### 功能
+### 功能介绍
 
 1.一个登录框，具备创建用户，并判断是否存在或者用户重名并插入数据库
 
