@@ -3,7 +3,7 @@
 import flask
 from flask import *
 import pymysql
-import hashlib
+# import hashlib
 
 # 创建Flask程序并定义模板位置
 app = Flask(__name__,
@@ -24,9 +24,9 @@ def log_handle():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        encrypass = hashlib.md5()
-        encrypass.update(password.encode(encoding='utf-8'))
-        password = encrypass.hexdigest()
+        # encrypass = hashlib.md5()
+        # encrypass.update(password.encode(encoding='utf-8'))
+        # password = encrypass.hexdigest()
 
         db = pymysql.connect(host="localhost", user="root", password="root", db="data")
         cursor = db.cursor()
@@ -40,7 +40,8 @@ def log_handle():
         if user is None:
             return flask.render_template("log_fail.html")
         else:
-            return flask.render_template("log_success.html", username=username)
+            # return flask.render_template("log_success.html", username=username)
+            return redirect("http://39.107.97.152:8077/#/home")
 
 
 
@@ -53,9 +54,10 @@ def register_handle():
         confirm_password = request.form.get('confirm_password')
         
         if password == confirm_password:
-            encrypass = hashlib.md5()
-            encrypass.update(password.encode(encoding='utf-8'))
-            password = encrypass.hexdigest()
+            # 对密码进行加密处理
+            # encrypass = hashlib.md5()
+            # encrypass.update(password.encode(encoding='utf-8'))
+            # password = encrypass.hexdigest()
 
             db = pymysql.connect(host="localhost", user="root", password="root", db="data")
             cursor = db.cursor()
