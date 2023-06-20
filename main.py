@@ -33,6 +33,7 @@ def log_handle():
 
     # 通过mysql进行存储
     db = pymysql.connect(host="localhost", user="root", password="root", db="data")
+    print(db)
 
     # 创建数据库指针cursor
     cursor = db.cursor()
@@ -73,9 +74,8 @@ def register_handle():
         username = request.form.get('username')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
-        # 判断两次密码是否正确
+        
         if password == confirm_password:
-            # 对密码进行md5处理
             encrypass = hashlib.md5()
             encrypass.update(password.encode(encoding='utf-8'))
             password = encrypass.hexdigest()
@@ -85,26 +85,24 @@ def register_handle():
 
             search_sql = "SELECT * FROM users"
             cursor.execute(search_sql)
+            user_list = cursor.fetchall()
+
+            # 判断是否存在相同用户名
+            if any(user['username'] == username for user in user_list):
+                have_same_username = 1
+                return flask.render_template("register_fail.html", have_same_username=have_same_username)
+
+            # 将用户名和加密后的密码插入数据库
+            sql = "INSERT INTO users VALUES('%s', '%s')" % (username, password)
+            cursor.execute(sql)
             db.commit()
-            user_list = []
-            for item in cursor.fetchall():
-                dict_user = {'username': item[0], 'password': item[1]}
-                user_list.append(dict_user)
-            for i in range(len(user_list)):
-                # 判断是否存在相同用户名
-                if user_list[i]['username'] != username:
-                    # 将用户名和加密后的密码插入数据库
-                    sql = "INSERT INTO users VALUES('%s','%s')" % (username, password)
-                    cursor.execute(sql)
-                    db.commit()
-                else:
-                    have_same_username = 1
-                    return flask.render_template("register_fail.html", have_same_username=have_same_username)
+
+            db.close()
+            return flask.redirect(flask.url_for('log_in'))
+
         else:
             two_passwd_wrong = 1
             return flask.render_template("register_fail.html", two_passwd_wrong=two_passwd_wrong)
-    db.close()
-    return flask.redirect(flask.url_for('log_in'))
 
 
 @app.route('/log_in', methods=['GET'])
