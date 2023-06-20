@@ -21,50 +21,27 @@ def index():
 
 @app.route('/log_handle', methods=['POST'])
 def log_handle():
-    find_user = False
     if request.method == 'POST':
-        # username和password是前端log_in.html的name字段里的字符
         username = request.form.get('username')
         password = request.form.get('password')
-        # 对密码进行md5处理
         encrypass = hashlib.md5()
         encrypass.update(password.encode(encoding='utf-8'))
         password = encrypass.hexdigest()
 
-    # 通过mysql进行存储
-    db = pymysql.connect(host="localhost", user="root", password="root", db="data")
-    print(db)
+        db = pymysql.connect(host="localhost", user="root", password="root", db="data")
+        cursor = db.cursor()
 
-    # 创建数据库指针cursor
-    cursor = db.cursor()
+        sql = "SELECT * FROM users WHERE username = %s AND password = %s"
+        cursor.execute(sql, (username, password))
+        user = cursor.fetchone()
 
-    sql = "SELECT * FROM users"
+        db.close()
 
-    # 执行数据库命令并将数据提取到cursor中
-    cursor.execute(sql)
-    # 确认命令
-    db.commit()
-    user_list = []
-    for item in cursor.fetchall():
-        dict_user = {'username': item[0], 'password': item[1]}
-        user_list.append(dict_user)
-    # 对数据库中所有的数据进行遍历,找出username
-    for i in range(len(user_list)):
-        if user_list[i]['username'] == username:
-            if user_list[i]['password'] == password:
-                find_user = True
-                break
-            else:
-                break
+        if user is None:
+            return flask.render_template("log_fail.html")
+        else:
+            return flask.render_template("log_success.html", username=username)
 
-    db.close()
-    if not find_user:
-        # 登录失败就跳转倒log_fail中并弹窗
-        return flask.render_template("log_fail.html")
-
-    else:
-        # 登录成功就跳转log_success,并将用户名带入
-        return flask.render_template("log_success.html", username=username)
 
 
 # 处理注册
@@ -85,7 +62,15 @@ def register_handle():
 
             search_sql = "SELECT * FROM users"
             cursor.execute(search_sql)
-            user_list = cursor.fetchall()
+            # cursor.fetchall()返回的结果是一个元组的列表
+            user_list = []
+
+            # 将查询结果转换为列表字典
+            columns = [column[0] for column in cursor.description]
+            for row in cursor.fetchall():
+                user_dict = dict(zip(columns, row))
+                user_list.append(user_dict)
+
 
             # 判断是否存在相同用户名
             if any(user['username'] == username for user in user_list):
