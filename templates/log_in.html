@@ -9,16 +9,21 @@
 <div class="login">
     <div class="login-triangle"></div>
 
-    <h2 class="login-header">Log in</h2>
+    <h2 class="login-header">欢迎登录智能协同标注平台</h2>
     <!-- 传入后端的内容 -->
 
     <form class="login-container" method="post" action="/log_handle">
-        <p><input type="text" name="username" placeholder="Username"></p>
-        <p><input type="password" name="password" placeholder="Password"></p>
-        <p><input type="submit" value="Log in"></p>
-
+        <p><input type="text" name="username" placeholder="用户名"></p>
+        <p><input type="password" name="password" placeholder="密码"></p>
+        <p><input type="submit" value="登录"></p>
+        <div style="text-align: right;">
+            <p>
+                没有账号？
+                <a style="color:blue" href="http://127.0.0.1:5000/register">立即注册</a>
+            </p>
+        </div>
     </form>
-     <a style="color:white" href="http://127.0.0.1:5000/register">No account?</a>
+     
 
 </div>
 <!-- 用于错误信息的弹窗 -->

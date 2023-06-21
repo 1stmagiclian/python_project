@@ -16,7 +16,7 @@ html, body {
 }
 
 .login {
-  width: 600px;                 /* 登录窗口的宽度设置*/
+  width: 500px;                 /* 登录窗口的宽度设置*/
   margin: 100px auto 16px auto; /* 调整登录窗口与屏幕上方的距离*/
   font-size: 16px;
 }

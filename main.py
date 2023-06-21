@@ -32,6 +32,7 @@ def log_handle():
         cursor = db.cursor()
 
         sql = "SELECT * FROM users WHERE username = %s AND password = %s"
+        print(sql)
         cursor.execute(sql, (username, password))
         user = cursor.fetchone()
 

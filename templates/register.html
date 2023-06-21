@@ -6,17 +6,24 @@
     <title>注册</title>
 </head>
 <body>
+
 <div class="login">
     <div class="login-triangle"></div>
 
-    <h2 class="login-header">Register</h2>
+    <h2 class="login-header">新用户注册</h2>
     <!-- 传入后端的内容 -->
 
     <form class="login-container" method="post" action="/register_handle">
-        <p><input type="text" name="username" placeholder="Username"></p>
-        <p><input type="password" name="password" placeholder="Password"></p>
-        <p><input type="password" name="confirm_password" placeholder="Confirm Password"></p>
-        <p><input type="submit" value="Register"></p>
+        <p><input type="text" name="username" placeholder="用户名"></p>
+        <p><input type="password" name="password" placeholder="输入密码"></p>
+        <p><input type="password" name="confirm_password" placeholder="再次确认密码"></p>
+        <p><input type="submit" value="立即注册"></p>
+        <div style="text-align: right;">
+            <p>
+                已有账号?
+                <a style="color:blue" href="http://127.0.0.1:5000/log_in">立即登录</a>
+            </p>
+        </div>
     </form>
 
 </div>
